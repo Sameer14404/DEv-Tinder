@@ -1,5 +1,7 @@
 const validator=require("validator")
 const mongoose=require("mongoose");
+const jwt= require("jsonwebtoken");
+const bcrypt=require("bcrypt");
 const { Schema } = mongoose;
 const userSchema=Schema({
     firstName:{
@@ -44,6 +46,7 @@ const userSchema=Schema({
     },
     photoUrl:{
         type:String,
+    
         default: function() {
             // Return different default URLs based on the gender
             return this.gender === 'male'
@@ -54,14 +57,27 @@ const userSchema=Schema({
     },
     about:{
         type:String,
-
+        require:true,
     },
     skills:{
-        type:[String]
+        type:[String],
+        require:true,
     }
 },{
    timestamps:true 
 })
+
+userSchema.methods.getJWT=async function(){
+    const token=await jwt.sign({_id:this._id},"DevTinder",{
+        expiresIn:"7d",
+    })
+    return token
+}
+userSchema.methods.validatePassword=async function (passwordInputByUser){
+    const passwordHash=this.password;
+    const isPasswordValid= await bcrypt.compare(passwordInputByUser,passwordHash);
+    return isPasswordValid
+}
 
 const User=  mongoose.model("user",userSchema);
 module.exports=User;
