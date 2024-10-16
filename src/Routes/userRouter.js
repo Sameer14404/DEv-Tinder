@@ -3,7 +3,7 @@ const { UserAuth } = require("../Middlewares/auth");
 const ConnectionRequest = require("../Models/connectionRequestSchema"); 
 const User = require("../Models/user");
 const userRouter = express.Router();
-const SAFE_DATA=["firstName", "lastName","age","about","skills","photoUrl"]
+const SAFE_DATA=["firstName", "lastName","age","about","skills","photoUrl","gender"]
 userRouter.get("/user/requests/received", UserAuth, async (req, res) => { 
     try {
         const loggedInUser = req.user;
@@ -79,6 +79,7 @@ userRouter.get("/feed",UserAuth,async(req,res)=>{
             .skip(skip)
             .limit(limit);
         res.json({data:users})
+      
     } catch (error) {
         console.log(error)
     }

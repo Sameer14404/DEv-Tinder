@@ -2,7 +2,7 @@ const express = require("express");
 const connectDB = require("./config/database");
 const cookieParser= require("cookie-parser")
 const cors= require("cors")
-
+require('dotenv').config();
 const app = express();
 app.use(
   cors({
@@ -25,7 +25,7 @@ app.use("/",userRouter);
 
 
 // Start the server
-app.listen(3000, async () => {
+app.listen(process.env.PORT, async () => {
   try {
     await connectDB();
     console.log("Server is listening on port 3000");

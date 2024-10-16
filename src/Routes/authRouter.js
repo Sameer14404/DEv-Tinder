@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 
 // Signup API (POST)
  authRouter.post("/signup", async (req, res) => {
-    const { firstName, lastName, emailId, password,age,gender } = req.body;
+    const { firstName, lastName, emailId, password,age,gender,skills } = req.body;
   
     try {
       validateSignUpData(req);
@@ -19,11 +19,12 @@ const bcrypt = require("bcrypt");
         emailId,
         age,
         gender,
+        skills,
         password: passwordHash,
       });
   
       await user.save();
-      res.send("User added successfully");
+      res.send(user);
     } catch (error) {
       res.status(400).send("ERROR: " + error.message);
     }
@@ -46,7 +47,7 @@ authRouter.post("/login", async (req, res) => {
         // const token= await jwt.sign({_id:user._id},"DevTinder")
         const token= await user.getJWT()
         res.cookie("token",token);
-        res.send("Login Successful!");
+        res.send(user);
       } else {
         throw new Error("Invalid Credentials!");
       }

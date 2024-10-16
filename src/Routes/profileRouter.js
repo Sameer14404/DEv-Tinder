@@ -21,7 +21,7 @@ profileRouter.get("/profile/view",UserAuth,async(req,res)=>{
     const loggedInUser=req.user
     Object.keys(req.body).forEach((key)=>(loggedInUser[key]=req.body[key]))
      await loggedInUser.save();
-     res.json({"message":`${loggedInUser.firstName} is updated sucessfully !!`})
+     res.json({"message":`${loggedInUser.firstName} is updated sucessfully !!`,"data":loggedInUser})
   } catch (error) {
      res.send(error)
   }

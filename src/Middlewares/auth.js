@@ -1,14 +1,15 @@
 const jwt= require("jsonwebtoken");
 const User=require("../Models/user")
-
+require('dotenv').config()
 
 const UserAuth=async(req,res,next)=>{
     try {
         const {token}=req.cookies;
+        
         if(!token){
-         res.status(401).send("Please login !!")
+          return res.status(401).send("please Login !")
         }
-        const decodedMessage=await jwt.verify(token,"DevTinder");
+        const decodedMessage=await jwt.verify(token,process.env.SECRET_KEY);
         const {_id}=decodedMessage;
         const user= await User.findById(_id);
         if(!user){
